@@ -163,14 +163,70 @@ const updateProfile = asyncHandler(async (req, res) => {
 
 
 const imageUpload = asyncHandler(async (req, res) => {
-
-
     console.log("image uploaded")
-
-
 })
 
-module.exports = { createProfile, getAllProfiles, getProfile, deleteProfile, updateProfile, imageUpload };
+
+
+
+const locationStorage = asyncHandler(async (req, res) => {
+    const { userId, latitudee, longitudee, birthdate, gender, preferedgender } = req.body;
+    console.log(userId, latitudee, longitudee, birthdate, gender, preferedgender)
+    try {
+        const profile = await Profile.findOneAndUpdate({ user_id: userId }, { $setOnInsert: { user_id: userId } },
+            { upsert: true, new: true });
+        console.log(profile)
+        if (profile) {
+            profile.user_id = userId;
+            profile.latitude = latitudee;
+            profile.longitude = longitudee;
+            profile.birthdate = birthdate;
+            profile.gender = gender;
+            profile.preference_gender = preferedgender;
+
+
+
+            await profile.save();
+            res.status(200).json({ message: "Location updated successfully" });
+        } else {
+            res.status(404).json({ message: "Profile not found" });
+        }
+    } catch (error) {
+        console.error("Error storing temp data :", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+
+
+});
+
+
+
+
+// const locationStorage = asyncHandler(async (req, res) => {
+//     const { userId, latitude, longitude } = req.body;
+//     // console.log(userId)
+//     try {
+//         const profile = await Profile.findOneAndUpdate({ user_id: userId }, { $setOnInsert: { user_id: userId } },
+//             { upsert: true, new: true });
+//         // console.log(profile)
+//         if (profile) {
+//             profile.user_id = userId;
+//             profile.latitude = latitude;
+//             profile.longitude = longitude;
+//             await profile.save();
+//             res.status(200).json({ message: "Location updated successfully" });
+//         } else {
+//             res.status(404).json({ message: "Profile not found" });
+//         }
+//     } catch (error) {
+//         console.error("Error updating location:", error);
+//         res.status(500).json({ message: "Internal server error" });
+//     }
+// });
+
+
+
+module.exports = { createProfile, getAllProfiles, getProfile, deleteProfile, updateProfile, imageUpload, locationStorage };
 
 
 

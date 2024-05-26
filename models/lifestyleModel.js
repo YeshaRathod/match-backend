@@ -8,27 +8,27 @@ const lifestyleSchema = new mongoose.Schema({
     },
     pets: {
         type: String,
-        enum: ['Dog', 'Cat', 'Replite', 'Bird', 'Fish', "Don't have, but love", 'Turtle', 'Rabbit', 'Pet-free', 'All the pets', 'Want a pet', 'Allergic to pets', 'Other']
+        // enum: ['Dog', 'Cat', 'Replite', 'Bird', 'Fish', "Don't have, but love", 'Turtle', 'Rabbit', 'Pet-free', 'All the pets', 'Want a pet', 'Allergic to pets', 'Other']
     },
     drinking: {
         type: String,
-        enum: ['Not for me', 'Socially, at the weekend', 'On special Occasions', 'Newly teetotal', 'Most nights']
+        // enum: ['Not for me', 'Socially, at the weekend', 'On special Occasions', 'Newly teetotal', 'Most nights']
     },
     smoke: {
         type: String,
-        enum: ['Smoker', 'Social smoker', 'Smoker when drinking', 'Non-smoker', 'Trying to quit']
+        // enum: ['Smoker', 'Social smoker', 'Smoker when drinking', 'Non-smoker', 'Trying to quit']
     },
     workout: {
         type: String,
-        enum: ['Everyday', 'Often', 'Sometimes', 'Never']
+        // enum: ['Everyday', 'Often', 'Sometimes', 'Never']
     },
     dietary_preference: {
         type: String,
-        enum: ['Vegetarian', 'Vegan', 'Pescatarian', 'Flexitarian', 'Omnivore', 'Other']
+        // enum: ['Vegetarian', 'Vegan', 'Pescatarian', 'Flexitarian', 'Omnivore', 'Other']
     },
     sleeping_habits: {
         type: String,
-        enum: ['Early Bird', 'Night Owl', 'It varies']
+        // enum: ['Early Bird', 'Night Owl', 'It varies']
     }
 });
 

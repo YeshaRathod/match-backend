@@ -1,7 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const { createLifestyle, updateLifestyle, deleteLifestyle } = require('../controllers/lifestyleCtrl');
+const { createLifestyle, updateLifestyle, deleteLifestyle, storeLifestyleTodb } = require('../controllers/lifestyleCtrl');
 const { authMiddleware } = require("../middlewares/authMiddleware")
+
+
+
+router.post("/create-updated-lifestyle", storeLifestyleTodb)
+
 
 // Create lifestyle
 router.post('/:id', authMiddleware, createLifestyle)

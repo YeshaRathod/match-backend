@@ -18,25 +18,31 @@ const profileSchema = new mongoose.Schema({
     },
     birthdate: {
         type: Date,
-        required: true,
+        // required: true,
     },
     gender: {
         type: String,
-        required: true,
-        enum: ['Male', 'Female', 'Other'],
+        // required: true,
+        enum: ['male', 'female', 'other'],
     },
     preference_gender: {
         type: String,
-        required: true,
-        enum: ['Male', 'Female', 'All'],
-        default: 'All'
+        // required: true,
+        enum: ['male', 'female', 'all'],
+        default: 'all'
     },
     age: {
         type: Number
     },
+    latitude: {
+        type: Number
+    },
+    longitude: {
+        type: Number
+    },
     profile_picture: {
-        type: String,
-        // default: "",
+        type: [String],
+        default: [],
     },
     moreAboutMe_id: {
         type: mongoose.Schema.Types.ObjectId,

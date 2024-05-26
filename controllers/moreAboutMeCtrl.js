@@ -2,6 +2,7 @@ const MoreAboutMe = require('../models/moreAboutMeModel');
 const asyncHandler = require("express-async-handler");
 const User = require('../models/userModel')
 const validateMongodbId = require('../utils/validateMongodbId');
+const moreAboutMeModel = require('../models/moreAboutMeModel');
 
 // Create More About Me
 const createMoreAboutMe = asyncHandler(async (req, res) => {
@@ -97,17 +98,10 @@ const updateMoreAboutMe = asyncHandler(async (req, res) => {
 const deleteMoreAboutMe = asyncHandler(async (req, res) => {
     const user_id = req.params.id; // Extract user_id from params directly
     const decodedUserId = req.user.id;
-
-
     try {
-        // const { id } = req.params;
-        // validateMongodbId({ id });
-
-
         if (user_id !== decodedUserId) {
             return res.status(403).json({ message: 'You are not authorized to delete this profile' });
         }
-
         const deletedMoreAboutMe = await MoreAboutMe.findOneAndDelete({ user_id: user_id });
 
         if (!deletedMoreAboutMe) {
@@ -122,4 +116,37 @@ const deleteMoreAboutMe = asyncHandler(async (req, res) => {
 });
 
 
-module.exports = { createMoreAboutMe, updateMoreAboutMe, deleteMoreAboutMe };
+
+
+
+//-------------------------storing data to databse------------------------
+
+const updateAboutMe = asyncHandler(async (req, res) => {
+    const { userId, zodiac, education, family_plans, covid_vaccine, personality_type, communication_style, love_style } = req.body
+    console.log(userId, zodiac, education, family_plans, covid_vaccine, personality_type, communication_style, love_style)
+    try {
+        const moreaboutme = await MoreAboutMe.findOneAndUpdate({ user_id: userId }, { $setOnInsert: { user_id: userId } },
+            { upsert: true, new: true })
+        if (moreaboutme) {
+            moreaboutme.user_id = userId,
+                moreaboutme.zodiac = zodiac,
+                moreaboutme.education = education,
+                moreaboutme.family_plans = family_plans,
+                moreaboutme.covid_vaccine = covid_vaccine,
+                moreaboutme.personality_type = personality_type,
+                moreaboutme.communication_style = communication_style,
+                moreaboutme.love_style = love_style,
+
+                await moreaboutme.save();
+            res.status(200).json({ message: "More about me saved to database successfully" });
+        }
+        else {
+            res.status(404).json({ message: "More about me not saved to database" });
+        }
+
+    } catch (error) {
+        console.log("error comes from Moreabout me controller MoreAboutMe", error)
+    }
+})
+
+module.exports = { createMoreAboutMe, updateMoreAboutMe, deleteMoreAboutMe, updateAboutMe };

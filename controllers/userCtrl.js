@@ -18,7 +18,11 @@ const createUser = asyncHandler(async (req, res, next) => {
         if (!findUser) {
             //create a new user
             const newUser = await User.create(req.body)
-            return res.status(201).json(newUser)
+            const token = generateToken(newUser._id)
+            return res.status(201).json({
+                token: token,
+                user: newUser
+            })
         }
         else {
             return res.status(409).json({ message: "User already exists" })
@@ -55,6 +59,7 @@ const loginUserCtrl = asyncHandler(async (req, res) => {
             mobile: findUser?.mobile,
             token: generateToken(findUser?._id),
         })
+        // console.log(_id, _name, email, mobile, token)
     }
     else {
         return res.status(401).send({ message: "Invalid Email or Password" })
@@ -64,9 +69,9 @@ const loginUserCtrl = asyncHandler(async (req, res) => {
 const getAllUser = asyncHandler(async (req, res) => {
     // console.log("hello")
     try {
-        const getUsers = await User.find()
-        //console.log(getUsers)
-        res.status(200).json(getUsers)
+        const count = await User.countDocuments();
+        const users = await User.aggregate([{ $sample: { size: count } }]);
+        res.status(200).json(users);
 
     } catch (error) {
         console.log(error)
@@ -200,29 +205,29 @@ const updateUser = asyncHandler(async (req, res) => {
 })
 
 
-const testAuth = asyncHandler(async (req, res) => {
-    const { email } = req.body
-    //console.log(email)
-    try {
-        const findUser = await User.findOne({ email })
-        //  console.log(findUser)
-        if (!email) {
-            return res.status(400).json({ message: "EmailId is required" })
-        }
-        if (findUser) {
-            const deleteUser = await User.findOneAndDelete({ email })
-            //  console.log(deleteUser)
-            return res.status(200).json({ message: "user deleted successfully" })
-        }
-        else {
-            const createUser = await User.create(req.body)
-            return res.status(200).json({ message: "User created successfully" })
-            // console.log(createUser)
-        }
-    } catch (error) {
-        console.log(error)
-    }
-})
+// const testAuth = asyncHandler(async (req, res) => {
+//     const { email } = req.body
+//     //console.log(email)
+//     try {
+//         const findUser = await User.findOne({ email })
+//         //  console.log(findUser)
+//         if (!email) {
+//             return res.status(400).json({ message: "EmailId is required" })
+//         }
+//         if (findUser) {
+//             const deleteUser = await User.findOneAndDelete({ email })
+//             //  console.log(deleteUser)
+//             return res.status(200).json({ message: "user deleted successfully" })
+//         }
+//         else {
+//             const createUser = await User.create(req.body)
+//             return res.status(200).json({ message: "User created successfully" })
+//             // console.log(createUser)
+//         }
+//     } catch (error) {
+//         console.log(error)
+//     }
+// })
 
 module.exports = {
     createUser,
@@ -231,6 +236,5 @@ module.exports = {
     getaUser,
     deleteUser,
     updateUser,
-    handleRefreshToken,
-    testAuth
+    handleRefreshToken
 }

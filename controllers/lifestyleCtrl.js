@@ -102,4 +102,36 @@ const deleteLifestyle = asyncHandler(async (req, res) => {
     }
 })
 
-module.exports = { createLifestyle, updateLifestyle, deleteLifestyle }
+//---------------------------------storing data to databse--------------------------------
+
+const storeLifestyleTodb = asyncHandler(async (req, res) => {
+    const { userId, pets, drinking, smoke, workout, dietary_preference, sleeping_habits } = req.body
+    console.log(userId, pets, drinking, smoke, workout, dietary_preference, sleeping_habits)
+    try {
+        const lifestyle = await Lifestyle.findOneAndUpdate({ user_id: userId }, { $setOnInsert: { user_id: userId } },
+            { upsert: true, new: true })
+        if (lifestyle) {
+            lifestyle.user_id = userId,
+                lifestyle.pets = pets,
+                lifestyle.drinking = drinking,
+                lifestyle.smoke = smoke,
+                lifestyle.workout = workout,
+                lifestyle.dietary_preference = dietary_preference,
+                lifestyle.sleeping_habits = sleeping_habits,
+
+
+                await lifestyle.save();
+
+
+            res.status(200).json({ message: "lifestyle saved to database successfully" });
+        }
+        else {
+            res.status(404).json({ message: "lifestyle not saved to database" });
+        }
+
+    } catch (error) {
+        console.log("error comes from lifestyle controller", error)
+    }
+})
+
+module.exports = { createLifestyle, updateLifestyle, deleteLifestyle, storeLifestyleTodb }
