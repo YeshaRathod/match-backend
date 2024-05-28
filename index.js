@@ -5,8 +5,20 @@ require('dotenv').config()
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser');
 const port = process.env.PORT || 3000
-
+const http = require('http')
 const cors = require('cors')
+
+const socketService = require('./services/socketService')
+
+//------------------------------------------------------------------------cors middleware
+app.use(cors())
+
+
+const server = http.createServer(app)
+
+const io = socketService(server)
+
+
 
 dbConnect();     //connection with database
 const authRouter = require('./routes/authRoutes')
@@ -16,12 +28,12 @@ const profileRouter = require('./routes/profileRoutes')
 const matchRouter = require('./routes/matchRoutes')
 const cardRouter = require('./routes/cardRoutes')
 const swipeRouter = require('./routes/swipeRoutes')
+const chatRoomRouter = require('./routes/chatRoomRoutes')
 
 const { errorHandler } = require('./middlewares/errorHandler')
 
 
-//------------------------------------------------------------------------cors middleware
-app.use(cors())
+
 
 //routes  ----middleware
 app.use(bodyParser.json())
@@ -36,6 +48,7 @@ app.use("/api/profile", profileRouter)               // Profile
 app.use("/api/match", matchRouter)
 app.use("/api/tinder", cardRouter)                 //  Match
 app.use("/api/swipe", swipeRouter)
+app.use("/api/chatroom", chatRoomRouter)
 
 
 
@@ -48,4 +61,9 @@ app.use(errorHandler)
 
 //app.use('/', (req, res) => res.send('Hello World!'))
 
+
+server.listen(5000, () => {
+    console.log("Server is running on port 5000");
+});
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
+
