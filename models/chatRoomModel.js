@@ -9,8 +9,12 @@ const chatRoomSchema = new mongoose.Schema({
         type: String,
         default: 'single',
         required: true
+    },
+},
+    {
+        timestamps: true,
     }
-});
+);
 
 const Chatroom = mongoose.model('Chatroom', chatRoomSchema);
 module.exports = Chatroom;

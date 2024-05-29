@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const { createProfile, getAllProfiles, deleteProfile, updateProfile, imageUpload, locationStorage } = require('../controllers/profileCtrl');
+const { createProfile, getAllProfiles, deleteProfile, updateProfile, imageUpload, locationStorage, languageStorage } = require('../controllers/profileCtrl');
 const { isAdmin, authMiddleware, isUser } = require('../middlewares/authMiddleware');
 const { upload, imageUploader } = require('../middlewares/multerMiddleware');
 
 router.post('/location', locationStorage)
+router.post('/languageStore', languageStorage)
 router.post('/upload-image', upload.array("image"), imageUploader, imageUpload)
 
 router.post('/create-profile/:id', authMiddleware, isUser, createProfile)

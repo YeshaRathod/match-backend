@@ -13,7 +13,7 @@ module.exports = (server) => {
 
         socket.on("sendMessage", (message) => {
             console.log(message)
-            socket.emit("receiveMessage", { message: "This is a reply from the server" });
+            socket.broadcast.emit("receiveMessage", message)
         })
 
 

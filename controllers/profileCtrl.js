@@ -183,9 +183,6 @@ const locationStorage = asyncHandler(async (req, res) => {
             profile.birthdate = birthdate;
             profile.gender = gender;
             profile.preference_gender = preferedgender;
-
-
-
             await profile.save();
             res.status(200).json({ message: "Location updated successfully" });
         } else {
@@ -198,6 +195,32 @@ const locationStorage = asyncHandler(async (req, res) => {
 
 
 });
+
+const languageStorage = asyncHandler(async (req, res) => {
+    const { userId, languages } = req.body;
+    console.log(req.body);
+
+    try {
+        // Update the profile by its MongoDB _id
+        const profile = await Profile.findByIdAndUpdate(
+            userId,
+            { languages: languages },
+            { new: true, upsert: true }
+        );
+        await profile.save();
+        if (profile) {
+            res.status(200).json({ message: "Languages updated successfully" });
+        } else {
+            res.status(404).json({ message: "Profile not found" });
+        }
+    } catch (error) {
+        console.error("Error storing languages:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+
+
+
 
 
 
@@ -226,7 +249,7 @@ const locationStorage = asyncHandler(async (req, res) => {
 
 
 
-module.exports = { createProfile, getAllProfiles, getProfile, deleteProfile, updateProfile, imageUpload, locationStorage };
+module.exports = { createProfile, getAllProfiles, getProfile, deleteProfile, updateProfile, imageUpload, locationStorage, languageStorage };
 
 
 

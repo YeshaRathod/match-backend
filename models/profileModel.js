@@ -44,6 +44,10 @@ const profileSchema = new mongoose.Schema({
         type: [String],
         default: [],
     },
+    languages: {
+        type: [String],
+        default: [],
+    },
     moreAboutMe_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'MoreAboutMe'
