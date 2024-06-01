@@ -202,15 +202,24 @@ const languageStorage = asyncHandler(async (req, res) => {
 
     try {
         // Update the profile by its MongoDB _id
-        const profile = await Profile.findByIdAndUpdate(
-            userId,
-            { languages: languages },
-            { new: true, upsert: true }
-        );
-        await profile.save();
+        // const profile = await Profile.findByIdAndUpdate(
+        //     userId,
+        //     { languages: languages },
+        //     { new: true, upsert: true }
+        // );
+
+        const profile = await Profile.findOneAndUpdate({ userId: userId });
+        console.log(profile);
         if (profile) {
+            profile.languages = languages;
+            await profile.save();
             res.status(200).json({ message: "Languages updated successfully" });
-        } else {
+        }
+
+        // if (profile) {
+
+        // } 
+        else {
             res.status(404).json({ message: "Profile not found" });
         }
     } catch (error) {

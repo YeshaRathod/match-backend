@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const { createMoreAboutMe, updateMoreAboutMe, deleteMoreAboutMe, updateAboutMe } = require('../controllers/MoreAboutMeCtrl.js');
+const { createMoreAboutMe, updateMoreAboutMe, deleteMoreAboutMe, updateAboutMe, getMoreAboutMe } = require('../controllers/MoreAboutMeCtrl.js');
 const { authMiddleware } = require("../middlewares/authMiddleware")
 
 
-
+router.post('/get-more-about-me', getMoreAboutMe)
 router.post('/update-more-about-me', updateAboutMe)
+
 
 // Create More About Me
 router.post('/:id', authMiddleware, createMoreAboutMe)

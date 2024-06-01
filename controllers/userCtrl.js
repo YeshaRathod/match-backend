@@ -79,6 +79,45 @@ const getAllUser = asyncHandler(async (req, res) => {
     }
 })
 
+
+const getAllTargetUser = asyncHandler(async (req, res) => {
+
+    const loggedInUserId = req.body.userId;
+    try {
+        const count = await User.countDocuments({ _id: { $ne: loggedInUserId } });
+        const users = await User.find({ _id: { $ne: loggedInUserId } });
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+        const shuffledUsers = shuffleArray(users);
+
+        //user images
+        const userProfiles = await Profile.find({
+            user_id: { $in: shuffledUsers.map(user => user._id) }
+        });
+
+        console.log(userProfiles)
+        const usersWithProfiles = shuffledUsers.map(user => {
+            const profile = userProfiles.find(p => p.user_id.toString() === user._id.toString());
+            return {
+                ...user.toObject(),
+                images: profile ? profile.profile_picture : []
+            };
+        });
+
+        console.log(usersWithProfiles)
+
+        res.status(200).json(usersWithProfiles);
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({ message: "can't get all profiles due to some Internal server error" })
+    }
+})
+
 //get a single user by ID
 
 const getaUser = asyncHandler(async (req, res) => {
@@ -236,5 +275,5 @@ module.exports = {
     getaUser,
     deleteUser,
     updateUser,
-    handleRefreshToken
+    handleRefreshToken, getAllTargetUser
 }

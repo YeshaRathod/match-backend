@@ -127,10 +127,11 @@ const asyncHandler = require("express-async-handler");
 
 const imageUploader = asyncHandler(async (req, res) => {
     try {
-        const user_id = req.body.user_id
-        console.log(user_id)
+
+        const user_id = req.body.userId; // Access userId from req.body
+        // console.log("userID :", user_id);
         const multipleImages = req.files
-        console.log(multipleImages)
+        // console.log(multipleImages)
         if (!multipleImages) {
             return res.status(400).json({ message: "No file uploaded" });
         }
@@ -142,8 +143,17 @@ const imageUploader = asyncHandler(async (req, res) => {
             ImageUrls.push(result.url)
         }
         req.multipleImages = ImageUrls
-        console.log(req.multipleImages)
-        return res.status(200).json({ message: "images uploaded successfully" })
+        console.log("Images urls :", ImageUrls)
+
+        const userProfile = await Profile.findOne({ user_id: user_id });
+        console.log("user profile  :", userProfile)
+        if (!userProfile) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        userProfile.profile_picture = req.multipleImages;
+        await userProfile.save();
+
+        return res.status(200).json({ message: "images uploaded successfully", images: ImageUrls })
     } catch (error) {
         console.log("error from image upload backend ", error)
     }

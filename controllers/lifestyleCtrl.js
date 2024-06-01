@@ -134,4 +134,22 @@ const storeLifestyleTodb = asyncHandler(async (req, res) => {
     }
 })
 
-module.exports = { createLifestyle, updateLifestyle, deleteLifestyle, storeLifestyleTodb }
+const getLifestyle = asyncHandler(async (req, res) => {
+    const { userId } = req.body; // Assuming userId is passed as a route parameter
+    console.log(userId)
+    try {
+        const lifestyle = await Lifestyle.findOne({ user_id: userId });
+        console.log(lifestyle)
+        if (lifestyle) {
+            res.status(200).json(lifestyle);
+        } else {
+            res.status(404).json({ message: "lifestyle not found for this user" });
+        }
+    } catch (error) {
+        console.error("Error fetching lifestyle data", error);
+        res.status(500).json({ message: "Intern al Server Error" });
+    }
+});
+
+
+module.exports = { createLifestyle, updateLifestyle, deleteLifestyle, storeLifestyleTodb, getLifestyle }

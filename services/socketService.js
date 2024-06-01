@@ -1,4 +1,8 @@
+const EventEmitter = require("events");
 const { Server } = require("socket.io")
+
+
+const eventEmitter = new EventEmitter()
 module.exports = (server) => {
     const io = new Server(server, {
         cors: {
@@ -11,11 +15,12 @@ module.exports = (server) => {
     io.on("connection", (socket) => {
         console.log("New client connected");
 
+
         socket.on("sendMessage", (message) => {
             console.log(message)
             socket.broadcast.emit("receiveMessage", message)
+            eventEmitter.emit("NEW_MESSAGE", message);
         })
-
 
         socket.on("disconnect", () => {
             console.log("Client disconnected");
@@ -24,5 +29,5 @@ module.exports = (server) => {
 
     });
 
-    return io;
+    return { io, eventEmitter };
 };

@@ -149,4 +149,23 @@ const updateAboutMe = asyncHandler(async (req, res) => {
     }
 })
 
-module.exports = { createMoreAboutMe, updateMoreAboutMe, deleteMoreAboutMe, updateAboutMe };
+
+const getMoreAboutMe = asyncHandler(async (req, res) => {
+    const { userId } = req.body; // Assuming userId is passed as a route parameter
+    console.log(userId)
+    try {
+        const moreaboutme = await MoreAboutMe.findOne({ user_id: userId });
+        console.log(moreaboutme)
+        if (moreaboutme) {
+            res.status(200).json(moreaboutme);
+        } else {
+            res.status(404).json({ message: "More about me not found for this user" });
+        }
+    } catch (error) {
+        console.error("Error fetching MoreAboutMe data", error);
+        res.status(500).json({ message: "Intern al Server Error" });
+    }
+});
+
+
+module.exports = { createMoreAboutMe, updateMoreAboutMe, deleteMoreAboutMe, updateAboutMe, getMoreAboutMe };
