@@ -118,9 +118,9 @@ const upload = multer({ storage });
 const { v2 } = require("cloudinary");
 
 v2.config({
-    cloud_name: 'drujwhndz',
-    api_key: '473926636931857',
-    api_secret: "nRHGPOQalq-0ph2h5uSv4KbwTbw"
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECREAT
 });
 
 const asyncHandler = require("express-async-handler");
