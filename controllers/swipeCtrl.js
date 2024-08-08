@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const { saveSwipeAction, checkMatch, notifyMatch, enableChat, notifyLike } = require("./SwipeActionCtrl");
 const Swipe = require("../models/swipeModel");
+const io = require('../services/socketService')
 
 const swipeDetails = asyncHandler(async (req, res) => {
     // console.log("swipe")
@@ -11,7 +12,7 @@ const swipeDetails = asyncHandler(async (req, res) => {
         const isMatch = await checkMatch(sourceUserId, targetUserId); // Check if there's a match
 
         if (isMatch) { // Handle the match or like notification
-            enableChat(sourceUserId, targetUserId);
+            // io.to(targetUserId).emit('newMatch', { message: 'You have a new match!😍😍😍', sourceUserId })
         } else {
             notifyLike(targetUserId, sourceUserId);
         }

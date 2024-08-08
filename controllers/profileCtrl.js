@@ -171,11 +171,11 @@ const imageUpload = asyncHandler(async (req, res) => {
 
 const locationStorage = asyncHandler(async (req, res) => {
     const { userId, latitudee, longitudee, birthdate, gender, preferedgender } = req.body;
-    console.log(userId, latitudee, longitudee, birthdate, gender, preferedgender)
+    // console.log(userId, latitudee, longitudee, birthdate, gender, preferedgender)
     try {
         const profile = await Profile.findOneAndUpdate({ user_id: userId }, { $setOnInsert: { user_id: userId } },
             { upsert: true, new: true });
-        console.log(profile)
+        // console.log(profile)
         if (profile) {
             profile.user_id = userId;
             profile.latitude = latitudee;
@@ -209,7 +209,7 @@ const languageStorage = asyncHandler(async (req, res) => {
         // );
 
         const profile = await Profile.findOneAndUpdate({ userId: userId });
-        console.log(profile);
+        // console.log(profile);
         if (profile) {
             profile.languages = languages;
             await profile.save();

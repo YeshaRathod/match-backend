@@ -152,10 +152,10 @@ const updateAboutMe = asyncHandler(async (req, res) => {
 
 const getMoreAboutMe = asyncHandler(async (req, res) => {
     const { userId } = req.body; // Assuming userId is passed as a route parameter
-    console.log(userId)
+    // console.log(userId)
     try {
         const moreaboutme = await MoreAboutMe.findOne({ user_id: userId });
-        console.log(moreaboutme)
+        // console.log(moreaboutme)
         if (moreaboutme) {
             res.status(200).json(moreaboutme);
         } else {

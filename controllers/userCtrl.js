@@ -29,7 +29,9 @@ const createUser = asyncHandler(async (req, res, next) => {
         }
     }
     catch (error) {
-        next(error)
+        // next(error)
+        console.log(error)
+        return res.status(409).json({ message: error })
     }
 })
 
@@ -100,7 +102,7 @@ const getAllTargetUser = asyncHandler(async (req, res) => {
             user_id: { $in: shuffledUsers.map(user => user._id) }
         });
 
-        console.log(userProfiles)
+        // console.log(userProfiles)
         const usersWithProfiles = shuffledUsers.map(user => {
             const profile = userProfiles.find(p => p.user_id.toString() === user._id.toString());
             return {
@@ -109,7 +111,7 @@ const getAllTargetUser = asyncHandler(async (req, res) => {
             };
         });
 
-        console.log(usersWithProfiles)
+        // console.log(usersWithProfiles)
 
         res.status(200).json(usersWithProfiles);
     } catch (error) {

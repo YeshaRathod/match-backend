@@ -22,6 +22,8 @@ module.exports = (server) => {
             eventEmitter.emit("NEW_MESSAGE", message);
         })
 
+
+
         socket.on("disconnect", () => {
             console.log("Client disconnected");
 

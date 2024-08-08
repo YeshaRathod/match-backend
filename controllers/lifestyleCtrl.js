@@ -106,7 +106,7 @@ const deleteLifestyle = asyncHandler(async (req, res) => {
 
 const storeLifestyleTodb = asyncHandler(async (req, res) => {
     const { userId, pets, drinking, smoke, workout, dietary_preference, sleeping_habits } = req.body
-    console.log(userId, pets, drinking, smoke, workout, dietary_preference, sleeping_habits)
+    // console.log(userId, pets, drinking, smoke, workout, dietary_preference, sleeping_habits)
     try {
         const lifestyle = await Lifestyle.findOneAndUpdate({ user_id: userId }, { $setOnInsert: { user_id: userId } },
             { upsert: true, new: true })
@@ -136,10 +136,10 @@ const storeLifestyleTodb = asyncHandler(async (req, res) => {
 
 const getLifestyle = asyncHandler(async (req, res) => {
     const { userId } = req.body; // Assuming userId is passed as a route parameter
-    console.log(userId)
+    // console.log(userId)
     try {
         const lifestyle = await Lifestyle.findOne({ user_id: userId });
-        console.log(lifestyle)
+        // console.log(lifestyle)
         if (lifestyle) {
             res.status(200).json(lifestyle);
         } else {
